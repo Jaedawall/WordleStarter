@@ -22,15 +22,17 @@ def wordle():
         i += 1
 
     def enter_action(s):
+        i = 0
         
-        typed_word = "".join([gw.get_square_letter(0, i) for i in range(N_COLS)])
-        
-        
+        current_row = gw.get_current_row()
+        typed_word = "".join([gw.get_square_letter(current_row, i) for i in range(N_COLS)])
+
         # Initialize lists to keep track of correctly guessed letters and their positions
         correct_letters = []
         correct_positions = []
         
         # Check each letter in the typed word against the random word
+        
         for i in range(N_COLS):
             typed_letter = typed_word[i]
             random_letter = Solution[i]
@@ -53,18 +55,18 @@ def wordle():
         #         window.set_square_color(0, i, MISSING_COLOR)
         
         # Check if the player has correctly guessed all five letters
-            if correct_positions == list(range(N_COLS)):
-                gw.show_message("Congratulations! You guessed the word correctly!")
+        if correct_positions == list(range(N_COLS)):
+            gw.show_message("Congratulations! You guessed the word correctly!")
+        else:
+            # Check if the typed word is a legitimate English word
+            if typed_word.lower() in FIVE_LETTER_WORDS:
+                # Move to the next row
+                current_row = gw.get_current_row()
+                if current_row < N_ROWS - 1:
+                    gw.set_current_row(current_row + 1)
             else:
-                # Check if the typed word is a legitimate English word
-                if typed_word.lower() in FIVE_LETTER_WORDS:
-                    # Move to the next row
-                    current_row = gw.get_current_row()
-                    if current_row < N_ROWS - 1:
-                        gw.set_current_row(current_row + 1)
-                else:
-                    gw.show_message("Not in word list")
-
+                gw.show_message("Not in word list")
+                gw.set_current_row(current_row)
 
 
     gw.add_enter_listener(enter_action)
