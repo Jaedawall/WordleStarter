@@ -55,7 +55,7 @@ def wordle():
         #         window.set_square_color(0, i, MISSING_COLOR)
         
         # Check if the player has correctly guessed all five letters
-        if correct_positions == list(range(N_COLS)):
+        if typed_word == Solution:
             gw.show_message("Congratulations! You guessed the word correctly!")
         else:
             # Check if the typed word is a legitimate English word
