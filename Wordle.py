@@ -30,7 +30,6 @@ def wordle():
         # Initialize lists to keep track of correctly guessed letters and their positions
         correct_letters = []
         correct_positions = []
-        guessed_words = []
         correct_position = 0
         correct_letter = 0
         # Check each letter in the typed word against the random word
@@ -65,7 +64,6 @@ def wordle():
             if typed_word.lower() in FIVE_LETTER_WORDS:
                 gw.show_message(str(correct_position) + " correct position " + '\n' + str(correct_letter) + " in word.")
                 # Move to the next row
-                guessed_words.append(typed_word)
                 current_row = gw.get_current_row()
                 
                 if current_row < N_ROWS - 1:
@@ -79,7 +77,6 @@ def wordle():
             
         if current_row == N_ROWS - 1:
             gw.show_message("Game over! The word was " + Solution)
-            gw.exit_on_close()
 
 
     gw.add_enter_listener(enter_action)
