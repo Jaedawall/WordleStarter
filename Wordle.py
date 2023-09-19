@@ -68,7 +68,7 @@ def wordle():
                 
                 if current_row < N_ROWS - 1:
                     gw.set_current_row(current_row + 1)
-            elif len(typed_word) != 4:
+            elif len(typed_word) < 4:
                 gw.show_message("Not enough letters")
                 gw.set_current_row(current_row)
             else:
