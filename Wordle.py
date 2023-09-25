@@ -6,6 +6,7 @@ BE SURE TO UPDATE THIS COMMENT WHEN YOU WRITE THE CODE.
 """
 
 import random
+from tkinter import *
 from tkinter import Label
 from WordleDictionary import FIVE_LETTER_WORDS
 from WordleGraphics import WordleGWindow, N_COLS, N_ROWS
@@ -17,6 +18,93 @@ from WordleGraphics import (
 # Opens playing window
 gw = WordleGWindow()
 
+#Create toggle button
+def hard_mode_toggle_button():
+    
+    # Add Title
+    gw._root.title('On/Off Switch!')
+    # # Add Geometry
+    # gw._root.geometry("300x200")
+    global is_on
+    is_on = False
+    global hard_mode
+    hard_mode = False
+    # Create Label
+    hard_mode_label = Label(gw._root,
+        text = "Hard mode Is Off!",
+        fg = "grey",
+        font = ("Helvetica", 12))
+    
+    hard_mode_label.pack(side="right", pady=10, anchor="e")
+    
+    # Define our switch function
+    def switch():
+        global hard_mode
+        global is_on
+        # Determine is on or off
+        if is_on:
+            hard_mode_button.config(image = off)
+            hard_mode_label.config(text = "Hard mode is Off",
+                            fg = "grey")
+            is_on = False
+            hard_mode = False
+        else:
+            hard_mode_button.config(image = on)
+            hard_mode_label.config(text = "Hard mode is On", fg = "green")
+            is_on = True
+            hard_mode = True
+    
+    # Define Our Images
+    on = PhotoImage(file = "on.png")
+    off = PhotoImage(file = "off.png")
+    
+    # Create A Button
+    hard_mode_button = Button(gw._root, image = off, bd = 0,
+                    command = switch)
+    hard_mode_button.pack(side="right", pady=10, anchor="e")
+    
+def color_toggle_button():
+    
+    # Add Title
+    gw._root.title('On/Off Switch!')
+    
+    # Keep track of the button state on/off
+    global default
+    default = True
+    
+    # Create Label
+    my_label = Label(gw._root,
+        text = "Default Color Scheme!",
+        fg = "grey",
+        font = ("Helvetica", 12))
+    
+    my_label.pack(side="left", padx= 5)
+    
+    # Define our switch function
+    def switch():
+        global default
+        
+        # Determine is on or off
+        if default:
+            color_button.config(image = on)
+            my_label.config(text = "Alternative Color Scheme",
+                            fg = "green")
+            default = False
+        else:
+        
+            color_button.config(image = off)
+            my_label.config(text = "Default Color Scheme", fg = "grey")
+            default = True
+    
+    # Define Our Images
+    on = PhotoImage(file = "on.png")
+    off = PhotoImage(file = "off.png")
+    
+    # Create A Button
+    color_button = Button(gw._root, image = off, bd = 0,
+                    command = switch)
+    color_button.pack(side="left", padx=5)
+
 # Default color scheme
 current_color_scheme = "default"  # Initial color scheme
 # Sets the solution word
@@ -26,13 +114,13 @@ if __name__ == "__main__":
     print("Solution:", Solution)  # Print the value of the Solution variable
 
 # Function to toggle between Color Schemes
-def toggle_color_scheme():
-    global current_color_scheme
+# def toggle_color_scheme():
+#     global default
 
-    if current_color_scheme == "default":
-        current_color_scheme = "alternate"
-    else:
-        current_color_scheme = "default"
+#     if current_color_scheme == "default":
+#         current_color_scheme = "alternate"
+#     else:
+#         current_color_scheme = "default"
 
 # Displays the color scheme instruction messeage
 def display_instruction_message():
@@ -46,13 +134,11 @@ correct_positions_dict = {0: '', 1: '', 2: '', 3: '', 4: ''}
 global correct_letters_list
 correct_letters_list = []  # For correct letters in wrong positions
 def wordle():
-
     i = 0
     for i, letter in enumerate(Solution):
         #gw.set_square_letter((N_ROWS - N_ROWS), (N_COLS - (N_COLS - i)), Solution[i])
         i += 1
     
-    hard_mode = True
     def enter_action(s):
         i = 0
         g = 0
@@ -66,11 +152,11 @@ def wordle():
         if typed_word == Solution:
             for i in range(N_COLS):
                     # Correct position
-                    if current_color_scheme == "default":
+                    if default == True:
                         # Green
                         gw.set_square_color(
                             current_row, i, CORRECT_COLOR_DEFAULT)
-                    elif current_color_scheme == "alternate":
+                    elif default == False:
                         # Blue
                         gw.set_square_color(current_row, i, CORRECT_COLOR_ALT)
             gw.show_message("Congratulations! You guessed the word correctly!")
@@ -129,29 +215,29 @@ def wordle():
                 for i in range(N_COLS):
                     if i in correct_positions:
                         # Correct position
-                        if current_color_scheme == "default":
+                        if default == True:
                             # Green
                             gw.set_square_color(
                                 current_row, i, CORRECT_COLOR_DEFAULT)
-                        elif current_color_scheme == "alternate":
+                        elif default == False:
                             # Blue
                             gw.set_square_color(current_row, i, CORRECT_COLOR_ALT)
                     elif i in correct_letter_positions:
                         # Correct letter in wrong position
-                        if current_color_scheme == "default":
+                        if default == True:
                             # Brownish yellow
                             gw.set_square_color(
                                 current_row, i, PRESENT_COLOR_DEFAULT)
-                        elif current_color_scheme == "alternate":
+                        elif default == False:
                             # Light pink
                             gw.set_square_color(current_row, i, PRESENT_COLOR_ALT)
                     else:
                         # Incorrect
-                        if current_color_scheme == "default":
+                        if default == True:
                             # Grey
                             gw.set_square_color(
                                 current_row, i, MISSING_COLOR_DEFAULT)
-                        elif current_color_scheme == "alternate":
+                        elif default == False:
                             # Tan/grey
                             gw.set_square_color(current_row, i, MISSING_COLOR_ALT)
 
@@ -175,7 +261,9 @@ def wordle():
 
 if __name__ == "__main__":
     # Bind the '1' key to toggle the color scheme
-    gw._root.bind("1", lambda event: toggle_color_scheme())
+    # gw._root.bind("1", lambda event: toggle_color_scheme())
 
-    display_instruction_message()
+    hard_mode_toggle_button()
+    color_toggle_button()
+    # display_instruction_message()
     wordle()
